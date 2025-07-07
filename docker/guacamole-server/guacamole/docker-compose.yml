@@ -1,0 +1,51 @@
+version: "3"
+
+services:
+    guacd:
+      container_name: guacd
+      image: guacamole/guacd
+      restart: unless-stopped
+      networks:
+        guac-net:
+          ipv4_address: 172.20.0.2
+    
+    guacweb:
+      container_name: guac_web
+      image: guacamole/guacamole
+      restart: unless-stopped
+      ports:
+        - 8080:8080
+      environment:
+        MYSQL_DATABASE: guacamole_db
+        MYSQL_HOSTNAME: 172.20.0.3
+        MYSQL_PASSWORD: pass123
+        MYSQL_USER: guacamole_user
+        GUACD_HOSTNAME: 172.20.0.2
+      depends_on:
+        - guacamole-sql
+        - guacd
+      networks:
+        guac-net:
+    
+    guacamole-sql:
+      container_name: guac-sql
+      image: mysql
+      restart: unless-stopped
+      environment:
+        MYSQL_ROOT_PASSWORD: Password123!
+      volumes:
+        - dbdata:/var/lib/mysql
+      networks:
+        guac-net:
+          ipv4_address: 172.20.0.3
+
+volumes:
+  dbdata:
+
+networks:
+  guac-net:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: "172.20.0.0/16"
