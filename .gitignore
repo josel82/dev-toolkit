@@ -1,1 +1,16 @@
+#MacOS files
 **/.DS_Store
+
+# Terraform files
+.terraform/
+*.tfplan
+*.tfstate
+*.tfstate.backup
+crash.log
+.terraform.lock.hcl
+
+# Sensitive variable files
+*.tfvars
+*.tfvars.json
+*.tfvars.yaml
+*.tfvars.yml
