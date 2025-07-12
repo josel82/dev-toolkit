@@ -1,0 +1,1 @@
+GRUB_FORCE_PARTUUID set, attempting initrdless boot.
