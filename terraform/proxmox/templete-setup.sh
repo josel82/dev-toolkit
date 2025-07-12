@@ -1,4 +1,5 @@
 #!/bin/bash
+# Credits to https://github.com/HouseOfLogicGH
 # run these commands on the proxmox host as root
 
 # download the image
