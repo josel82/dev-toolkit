@@ -1,0 +1,45 @@
+---
+global:
+  checkNewVersion: false
+  sendAnonymousUsage: false
+
+#<-- comment this block out for production
+api:
+  dashboard: true
+  insecure: true
+
+entryPoints:
+  web:
+    address: ":80"
+    http:
+      redirections:
+        entryPoint:
+          to: websecure
+          scheme: https
+          permanent: true
+
+  websecure:
+    address: ":443"
+    
+
+providers:
+  docker:
+    exposedByDefault: false
+    network: proxy
+  file:
+    directory: /etc/traefik
+    watch: true
+
+certificatesResolvers:
+  duckdns:
+    acme:
+      email: example@email.com
+      storage: /var/traefik/certs/duckdns-acme.json
+      caServer: "https://acme-staging-v02.api.letsencrypt.org/directory" #<-- Staging server 
+      #caServer: " https://acme-v02.api.letsencrypt.org/directory" <-- production server
+      dnsChallenge:
+        provider: duckdns
+        resolvers:
+          - "1.1.1.1:53"
+          - "8.8.8.8:53"
+

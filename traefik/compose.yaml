@@ -1,0 +1,23 @@
+---
+services:
+  traefik:
+    image: traefik:v3.4
+    container_name: traefik
+    ports:
+      - "80:80"
+      - "443:443"
+      - "8080:8080" #<-- Not for production
+    volumes:
+      - ./certs/:/var/traefik/certs/:rw
+      - ./config/:/etc/traefik/:ro
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - DUCKDNS_TOKEN=duck-dns-token
+    networks:
+      - proxy
+    restart: unless-stopped
+    
+
+networks:
+  proxy:
+    name: proxy
