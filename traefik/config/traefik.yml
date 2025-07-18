@@ -3,7 +3,11 @@ global:
   checkNewVersion: false
   sendAnonymousUsage: false
 
-#<-- comment this block out for production
+#<-- Uncomment this block for troubleshooting
+# log:
+# level: debug
+
+#<-- Comment this block out for production
 api:
   dashboard: true
   insecure: true
@@ -31,15 +35,25 @@ providers:
     watch: true
 
 certificatesResolvers:
-  duckdns:
+#Use this resolver while in testing fase
+  staging:
     acme:
       email: example@email.com
-      storage: /var/traefik/certs/duckdns-acme.json
+      storage: /var/traefik/certs/acme.json
       caServer: "https://acme-staging-v02.api.letsencrypt.org/directory" #<-- Staging server 
-      #caServer: " https://acme-v02.api.letsencrypt.org/directory" <-- production server
       dnsChallenge:
-        provider: duckdns
+        provider: cloudflare
         resolvers:
           - "1.1.1.1:53"
           - "8.8.8.8:53"
-
+#Use this resolver for production
+  production:
+    acme:
+      email: example@email.com
+      storage: /var/traefik/certs/acme.json
+      caServer: " https://acme-v02.api.letsencrypt.org/directory" #<-- production server
+      dnsChallenge:
+        provider: cloudflare
+        resolvers:
+          - "1.1.1.1:53"
+          - "8.8.8.8:53"
