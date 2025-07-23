@@ -1,4 +1,12 @@
 ---
+# Define the secret 'cloudflare_token' in this example
+# write your secret on the file ./secret/cloudflare_token
+#`echo "my-super-secret" >> ./secret/cloudflare_token`
+# Change file permissions `sudo chmod 600 ./secret/cloudflare_token`
+secrets:
+  cloudflare_token:
+    file: ./secrets/cloudflare_token
+
 services:
   traefik:
     image: traefik:v3.4
@@ -11,8 +19,18 @@ services:
       - ./certs/:/var/traefik/certs/:rw
       - ./config/:/etc/traefik/:ro
       - /var/run/docker.sock:/var/run/docker.sock
+    # By referencing the cloudflare_token secret here
+    # we are granting the service access to this secret
+    secrets:
+      - cloudflare_token
+    # By deafult docker compose mounts secret files inside containers
+    # in /run/secrets/<secret-name>
+    # Then we tell our application (traefik in this example) to read the secret's
+    # value from this file by setting the env vairable and adding '_FILE'
+    # at the end of the name
     environment:
-      - CF_DNS_API_TOKEN=${CF_DNS_API_TOKEN} #Define this variable inside the .env file
+      CF_DNS_API_TOKEN_FILE: /run/secrets/cloudflare_token
+
     networks:
       - proxy
     restart: unless-stopped
