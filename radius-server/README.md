@@ -228,7 +228,8 @@ pip install mysql-connector-python
 ```
     
 2. **Use the Enhanced Python Script:**
-The script provided in our previous conversation (with the `if __name__ == "__main__":` block and environment variable for password) is ready to use. Save it (e.g., as `add_radius_user.py`).
+The script provided in this repository `add_radius_user.py` is ready to use
+
 3. **Set Database Password Environment Variable:Before running the script**, set the `DB_PASSWORD` environment variable in your terminal:Bash
     
 ```bash
